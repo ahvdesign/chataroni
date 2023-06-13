@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   enum Theme {
     light = "light",
     dark = "dark",
@@ -30,12 +32,25 @@
     coffee = "coffee",
     winter = "winter",
   }
+
   const themes: Theme[] = Object.values(Theme);
 
-  function changeTheme() {
+  function handleMount() {
+    const storedTheme = localStorage.getItem("theme");
+    const defaultTheme =
+      storedTheme && themes.includes(storedTheme as Theme)
+        ? storedTheme
+        : "dark";
+    document.documentElement.setAttribute("data-theme", defaultTheme);
+  }
+
+  function changeTheme(event: Event) {
     const theme = (event.target as HTMLSelectElement).value;
     document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   }
+
+  onMount(handleMount);
 </script>
 
 <select on:change={changeTheme} class="select select-ghost w-auto max-w-xs">
