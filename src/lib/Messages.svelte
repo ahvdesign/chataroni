@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
+  import { onMount, onDestroy, afterUpdate, tick } from "svelte";
   import { currentUser, pb } from "./pocketbase";
 
   let newMessage: string;
   let messages = [];
   let unsubscribe: () => void;
+  let messagesContainer: HTMLElement;
 
   onMount(async () => {
     // Get initial messages
@@ -30,6 +31,23 @@
       });
   });
 
+  afterUpdate(() => {
+    console.log("afterUpdate");
+    scrollToBottom(messagesContainer);
+  });
+
+  $: if (messagesContainer && newMessage) {
+    console.log("tick");
+    scrollToBottom(messagesContainer);
+  }
+
+  const scrollToBottom = async (node) => {
+    node.scroll({
+      top: node.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
   // Unsubscribe from realtime messages
   onDestroy(() => {
     unsubscribe?.();
@@ -45,7 +63,7 @@
   }
 </script>
 
-<div class="messages">
+<div class="messages" bind:this={messagesContainer}>
   {#each messages as message (message.id)}
     <div class="chat chat-start">
       <div class="chat-image avatar">
