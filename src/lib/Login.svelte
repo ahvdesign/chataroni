@@ -37,11 +37,27 @@
     <button on:click={signOut}>Sign Out</button>
   </p>
 {:else}
-  <form on:submit|preventDefault>
-    <input placeholder="Username" type="text" bind:value={username} />
-    <input placeholder="Password" type="password" bind:value={password} />
+  <form on:submit|preventDefault class="container mx-auto my-12 flex flex-col">
+    <input
+      class="input input-bordered w-full max-w-xs mx-auto mb-3"
+      placeholder="Username"
+      type="text"
+      bind:value={username}
+    />
+    <input
+      class="input input-bordered w-full max-w-xs mx-auto mb-3"
+      placeholder="Password"
+      type="password"
+      bind:value={password}
+    />
 
-    <button on:click={signUp}>Sign Up</button>
-    <button on:click={login}>Login</button>
+    <button
+      on:click={signUp}
+      class="mx-auto mb-3 btn btn-primary w-full max-w-xs">Sign Up</button
+    >
+    <button
+      on:click={login}
+      class="mx-auto mb-3 btn btn-secondary w-full max-w-xs">Login</button
+    >
   </form>
 {/if}
